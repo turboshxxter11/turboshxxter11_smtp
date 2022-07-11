@@ -1,0 +1,237 @@
+import smtplib
+import os
+import sys
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from datetime import datetime
+
+class TurboSx:
+    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,mail_type="mail",body_type="html"):
+        self.from_address=from_address
+        self.to=to
+        self.subject=subject
+        self.body=body
+        self.pwd=pwd
+        self.mail_type=mail_type
+        self.body_type=body_type
+        self.smtp_server=smtp_server
+        self.smtp_port=smtp_port
+        self.send_mail()
+
+    def display(self):
+        print(self.from_address)
+
+    def compose_mail(self):
+        #print(self.mail_type)
+        #print(self.body_type)
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = self.subject
+        msg['From'] = self.from_address
+        msg['To'] = self.to
+
+        # Create the body of the message (a plain-text and an HTML version).
+        body = self.body
+
+        # Record the MIME types of both parts - text/plain and text/html.
+        if(self.body_type=="text"):
+            part=MIMEText(self.body, 'plain')
+        elif(self.body_type=="html"):
+            part=MIMEText(self.body, 'html')
+        else:
+            print("Error in loading Body Type!!!")
+   
+        # Attach parts into message container.
+        # According to RFC 2046, the last part of a multipart message, in this case
+        # the HTML message, is best and preferred.
+        msg.attach(part)
+        return msg
+
+
+    def send_mail(self):
+        if(self.mail_type=="gmail"):
+            self.send_gmail()
+        elif(self.mail_type=="mail"):
+            self.send_mail(self.smtp_server,int(self.smtp_port))
+        else:
+            print("Error in Loading Mail Type")
+
+
+    def send_gmail(self):
+        msg=self.compose_mail()
+        
+        # Send the message via local SMTP server. 
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.connect('smtp.gmail.com', 587)
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
+        s.login(self.from_address, self.pwd) #login with mail_id and password
+        # sendmail function takes 3 arguments: sender's address, recipient's address
+        # and message to send - here it is sent as one string.
+        s.sendmail(self.from_address, self.to, msg.as_string())
+        s.quit()
+        
+
+    def send_mail(self):
+        msg=self.compose_mail()
+        
+        # Send the message via local SMTP server. 
+        s = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        s.connect(self.smtp_server, self.smtp_port)
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
+        s.login(self.from_address, self.pwd) #login with mail_id and password
+        # sendmail function takes 3 arguments: sender's address, recipient's address
+        # and message to send - here it is sent as one string.
+        s.sendmail(self.from_address, self.to, msg.as_string())
+        s.quit()
+       
+
+class Shoot:
+    def __init__(self,inbound_path=sys.argv[1]+"\inbound",outbound_path=sys.argv[1]+"\outbound\\"+datetime.now().strftime("%Y%m%d"),builds_path=sys.argv[1]+"\\builds"):        
+        self.inbound_path=inbound_path
+        self.outbound_path=outbound_path
+        self.builds_path=builds_path
+        if not os.path.exists(self.outbound_path):
+            os.makedirs(self.outbound_path)
+
+        ls=os.listdir(self.inbound_path)
+        t_count=len(ls)
+        if(len(ls)>0):
+            print("Total Files:",len(ls))
+            f_count=1
+            for i in os.listdir(self.inbound_path):
+                now = datetime.now()
+                fpath=self.inbound_path+"\\"+i
+                wpath=self.outbound_path+"\\"+now.strftime("%H%M%S")+"_"+i
+                wpath_f=self.outbound_path+"\\fail_"+now.strftime("%H%M%S")+"_"+i
+                print("Preparing File "+str(f_count)+" of "+str(t_count))
+                f_count=f_count+1
+                if(i.endswith('.csv')):                    
+
+                    
+                    print("File name: "+fpath)
+                    #print(wpath)
+                    
+                    file= open(fpath,'r')
+                    file_write = open(wpath, 'a+')
+                    file_write_f =  open(wpath_f, 'a+')
+                    count=0
+                    
+                    for line in file:
+                        if(count==0):
+                            ln=line.split('\n')[0].split(',')
+                            try:
+                            
+                                from_address=ln[0]
+                                pwd=ln[1]
+                                smtp_server=ln[2]
+                                smtp_port=ln[3]
+                                file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                            except Exception as e:
+                                print("Error in First line Configs for File {file}!!!".format(file=fpath))
+                        else:
+                            ln=line.split('\n')[0].split(',')
+                            print(count, end="::")
+                            print(ln,end="")
+                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0])
+                            #print("Subject :"+subject)
+                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).format(name=ln[0])
+                            #print("Body :"+body)
+                            
+                            try:
+                                TurboSx(from_address,ln[1],subject,body,pwd,smtp_server,smtp_port)
+                                
+                                print("-> Success")
+                                file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                            except Exception as e:
+                                
+                                print("-> Fail")
+                                file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                        count=count+1
+                    file_write.close()
+                    file_write_f.close()
+                    file.close()
+                    os.remove(fpath)
+                else:
+                    print("Invalid File Extension "+i)
+                    os.remove(fpath)
+        else:
+            print("No Files To Process in inbound")
+
+    def readBuildFiles(self,path):
+        file= open(path,'r')
+        str=""
+        for line in file:
+            str=str+line
+        return str
+            
+class splitFeeds:
+    def __init__(self,feeds_path=sys.argv[1]+"\\feeds",inbound_path=sys.argv[1]+"\\inbound"):
+        self.feeds_path=feeds_path
+        self.inbound_path=inbound_path
+        try:
+            self.performSplit()
+        except Exception as e:
+            print("Error!!! please Review data.csv and email.csv in Feeds Path!")
+        print("Split Operation Exit!")
+
+    def performSplit(self):
+        file_data= open(self.feeds_path+"\\data.csv",'r')
+        file_email= open(self.feeds_path+"\\email.csv",'r')
+        count=0
+        k=0
+        n=int(input("Enter The Data File Record Limit:"))
+        ls=file_email.readlines()
+        for line_data in file_data:
+            
+            if(count%(n+1)==0):
+                curr_path=self.inbound_path+"\\"+str(count)+"_"+datetime.now().strftime("%H%M%S")+"_email.csv"
+                file_write = open(curr_path, 'a+')
+                
+                
+                
+                file_write.write(ls[k].strip()+"\n")
+                print(ls[k])
+                k=(k+1)%len(ls)
+                
+                
+            else:
+                file_write = open(curr_path, 'a+')
+                ln=line_data.strip().split(',')
+                file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+            count=count+1
+            file_write.close()
+
+
+
+x=True
+while x:
+    print("Select Option:")
+    print("Press 1 to Split Files (Feeds -> inbound):")
+    print("Press 2 to Shoot (inbound -> outbound):")
+    print("Press 3 to logout")
+    val=input("Enter Option:")
+
+    if (val == "1"):
+        print("Option 1")
+        splitFeeds()
+    elif (val == "2"):
+        print("Option 2")
+        Shoot()
+    elif(val == "3"):
+        print("Option 3")
+        x=False
+    else:
+        print("Invalid Selection")
+        
+    
+
+    
+
+
+        
+        
