@@ -215,34 +215,39 @@ ids=input("Enter ID:")
 pwd=input("Enter Password:")
 code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&PWD={pwd}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
 
-if (code == '001'):    
-    while x:
-        print("Select Option:")
-        print("Press 1 to Split Files (Feeds -> inbound):")
-        print("Press 2 to Shoot (inbound -> outbound):")
-        print("Press 3 to logout")
-        val=input("Enter Option:")
 
-        if (val == "1"):
-            print("Option 1")
-            splitFeeds()
-        elif (val == "2"):
-            print("Option 2")
-            Shoot()
-        elif(val == "3"):
-            print("Option 3")
-            code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
-            x=False
-        else:
-            print("Invalid Selection")
-elif (code == '002'):
-    print("User Already Signed In!")
-elif (code == '009'):
-    print("Invalid Credentials!")
-else:
-    print("Error Code:"+code)
+try:
+
+    if (code == '001'):    
+        while x:
+            print("Select Option:")
+            print("Press 1 to Split Files (Feeds -> inbound):")
+            print("Press 2 to Shoot (inbound -> outbound):")
+            print("Press 3 to logout")
+            val=input("Enter Option:")
+
+            if (val == "1"):
+                print("Option 1")
+                splitFeeds()
+            elif (val == "2"):
+                print("Option 2")
+                Shoot()
+            elif(val == "3"):
+                print("Option 3")
+                code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+                x=False
+            else:
+                print("Invalid Selection")
+    elif (code == '002'):
+        print("User Already Signed In!")
+    elif (code == '009'):
+        print("Invalid Credentials!")
+    else:
+        print("Error Code:"+code)
     
-        
+except Exception as e:
+    print(e)
+    code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
         
     
 
