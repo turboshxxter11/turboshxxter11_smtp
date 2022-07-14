@@ -140,7 +140,7 @@ class Shoot:
                             print(ln,end="")
                             subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0])
                             #print("Subject :"+subject)
-                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).format(name=ln[0])
+                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0])
                             #print("Body :"+body)
                             
                             try:
