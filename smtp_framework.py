@@ -167,7 +167,7 @@ class Shoot:
         file= open(path,'r')
         str=""
         for line in file:
-            str=str+line
+            str=str+line.strip()
         return str
             
 class splitFeeds:
