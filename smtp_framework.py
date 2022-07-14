@@ -50,7 +50,7 @@ class TurboSx:
         return msg
 
 
-    def send_mail(self):
+    def choose_mail(self):
         if(self.mail_type=="gmail"):
             self.send_gmail()
         elif(self.mail_type=="mail"):
