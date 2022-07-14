@@ -124,7 +124,7 @@ class Shoot:
                     
                     for line in file:
                         if(count==0):
-                            ln=line.split('\n')[0].split(',')
+                            ln=line.strip().split(',')
                             try:
                             
                                 from_address=ln[0]
@@ -135,7 +135,7 @@ class Shoot:
                             except Exception as e:
                                 print("Error in First line Configs for File {file}!!!".format(file=fpath))
                         else:
-                            ln=line.split('\n')[0].split(',')
+                            ln=line.strip().split(',')
                             print(count, end="::")
                             print(ln,end="")
                             subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0])
