@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 from datetime import datetime
 
 class TurboSx:
-    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,mail_type="mail",body_type="html"):
+    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,smtp_con,mail_type="mail",body_type="html"):
         self.from_address=from_address
         self.to=to
         self.subject=subject
@@ -18,6 +18,7 @@ class TurboSx:
         self.body_type=body_type
         self.smtp_server=smtp_server
         self.smtp_port=smtp_port
+        self.smtp_con=smtp_con
         self.send_mail()
 
     def display(self):
@@ -63,32 +64,32 @@ class TurboSx:
         msg=self.compose_mail()
         
         # Send the message via local SMTP server. 
-        s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.connect('smtp.gmail.com', 587)
-        s.ehlo()
-        s.starttls()
-        s.ehlo()
+        #s = smtplib.SMTP('smtp.gmail.com', 587)
+        #s.connect('smtp.gmail.com', 587)
+        #s.ehlo()
+        #s.starttls()
+        #s.ehlo()
         s.login(self.from_address, self.pwd) #login with mail_id and password
         # sendmail function takes 3 arguments: sender's address, recipient's address
         # and message to send - here it is sent as one string.
         s.sendmail(self.from_address, self.to, msg.as_string())
-        s.quit()
+        #s.quit()
         
 
     def send_mail(self):
         msg=self.compose_mail()
         
         # Send the message via local SMTP server. 
-        s = smtplib.SMTP(self.smtp_server, self.smtp_port)
-        s.connect(self.smtp_server, self.smtp_port)
-        s.ehlo()
-        s.starttls()
-        s.ehlo()
-        s.login(self.from_address, self.pwd) #login with mail_id and password
+        #s = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        #s.connect(self.smtp_server, self.smtp_port)
+        #s.ehlo()
+        #s.starttls()
+        #s.ehlo()
+        self.smtp_con.login(self.from_address, self.pwd) #login with mail_id and password
         # sendmail function takes 3 arguments: sender's address, recipient's address
         # and message to send - here it is sent as one string.
-        s.sendmail(self.from_address, self.to, msg.as_string())
-        s.quit()
+        self.smtp_con.sendmail(self.from_address, self.to, msg.as_string())
+        #s.quit()
        
 
 class Shoot:
@@ -132,6 +133,15 @@ class Shoot:
                                 smtp_server=ln[2]
                                 smtp_port=ln[3]
                                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                                try:
+                                    s = smtplib.SMTP(smtp_server, smtp_port)
+                                    s.connect(smtp_server, smtp_port)
+                                    s.ehlo()
+                                    s.starttls()
+                                    s.ehlo()
+                                except Exception as e:
+                                    print(e)
+                                    print("Unable to Connect to the smtp server: "+smtp_server+" at port: "+smtp_port)
                             except Exception as e:
                                 print("Error in First line Configs for File {file}!!!".format(file=fpath))
                         else:
@@ -144,19 +154,24 @@ class Shoot:
                             #print("Body :"+body)
                             
                             try:
-                                TurboSx(from_address,ln[1],subject,body,pwd,smtp_server,smtp_port)
+                                TurboSx(from_address,ln[1],subject,body,pwd,smtp_server,smtp_port,s)
                                 
                                 print("-> Success")
                                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                             except Exception as e:
                                 
                                 print("-> Fail")
+                                
                                 file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                         count=count+1
                     file_write.close()
                     file_write_f.close()
                     file.close()
                     os.remove(fpath)
+                    try:
+                        s.quit()
+                    except Exception as e:
+                        print(e)
                 else:
                     print("Invalid File Extension "+i)
                     os.remove(fpath)
@@ -189,7 +204,7 @@ class splitFeeds:
         ls=file_email.readlines()
         for line_data in file_data:
             
-            if(count%(n+1)==0):
+            if(count%(n)==0):
                 curr_path=self.inbound_path+"\\"+str(count)+"_"+datetime.now().strftime("%H%M%S")+"_email.csv"
                 file_write = open(curr_path, 'a+')
                 
@@ -197,7 +212,11 @@ class splitFeeds:
                 
                 file_write.write(ls[k].strip()+"\n")
                 print(ls[k])
-                k=(k+1)%len(ls)
+                
+                ln=line_data.strip().split(',')
+                file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                
+                k=(k)%len(ls)
                 
                 
             else:
