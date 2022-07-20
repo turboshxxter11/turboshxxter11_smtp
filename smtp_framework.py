@@ -216,7 +216,7 @@ class splitFeeds:
                 ln=line_data.strip().split(',')
                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                 
-                k=(k)%len(ls)
+                k=(k+1)%len(ls)
                 
                 
             else:
