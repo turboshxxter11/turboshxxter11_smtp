@@ -159,7 +159,7 @@ class Shoot:
                                 print("-> Success")
                                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                             except Exception as e:
-                                
+                                print(e)
                                 print("-> Fail")
                                 
                                 file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
