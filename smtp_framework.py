@@ -156,12 +156,12 @@ class Shoot:
                             try:
                                 TurboSx(from_address,ln[1],subject,body,pwd,smtp_server,smtp_port,s)
                                 
-                                print("-> Success", end=" from ")
+                                print("-> Success", end=" : ")
                                 print(smtp_server)
                                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                             except Exception as e:
                                 print(e)
-                                print("-> Fail ", end=" from ")
+                                print("-> Fail ", end=" : ")
                                 print(smtp_server)
                                 
                                 file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
