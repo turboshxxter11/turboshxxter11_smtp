@@ -164,7 +164,7 @@ class Shoot:
                                 print("-> Fail ", end=" : ")
                                 print(smtp_server)
                                 
-                                file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                                file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+","+smtp_server+","+from_address+"\n")
                         count=count+1
                     file_write.close()
                     file_write_f.close()
