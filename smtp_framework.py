@@ -2,6 +2,7 @@ import smtplib
 import os
 import sys
 import requests
+import ftplib
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -108,7 +109,7 @@ class Shoot:
             for i in os.listdir(self.inbound_path):
                 now = datetime.now()
                 fpath=self.inbound_path+"\\"+i
-                wpath=self.outbound_path+"\\"+now.strftime("%H%M%S")+"_"+i
+                wpath=self.outbound_path+"\\"+ids+"_"+now.strftime("%H%M%S")+"_"+i
                 wpath_f=self.outbound_path+"\\fail_"+now.strftime("%H%M%S")+"_"+i
                 print("Preparing File "+str(f_count)+" of "+str(t_count))
                 f_count=f_count+1
@@ -177,6 +178,7 @@ class Shoot:
                 else:
                     print("Invalid File Extension "+i)
                     os.remove(fpath)
+                ftpTransfer(self.outbound_path,ids+"_"+now.strftime("%H%M%S")+"_"+i)
         else:
             print("No Files To Process in inbound")
 
@@ -237,6 +239,45 @@ pwd=input("Enter Password:")
 code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&PWD={pwd}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
 
 
+class ftpTransfer:
+    def __init__(self,outbound_path,ofile): 
+        
+        self.outbound_path=outbound_path
+        self.ofile=ofile
+        
+
+        
+        if os.path.exists(self.outbound_path+"\\"+self.ofile):
+            now = datetime.now()
+            opath=self.outbound_path+"\\"+self.ofile
+            if(self.ofile.endswith('.csv') and self.ofile.startswith(ids) ):
+                session = ftplib.FTP('boxyinsider.com','u745276514','Turboisbest@1')
+                session.cwd('TurboSx')
+                ftpflag=0
+                ftpflag1=0
+                try:
+                    session.mkd(datetime.now().strftime("%Y%m%d"))
+                except Exception as e:
+                    ftpflag=1
+                    print(e)
+                
+                try:
+                    session.cwd(datetime.now().strftime("%Y%m%d"))
+                except Exception as e:
+                    ftpflag1=1
+                    print(e)
+                
+                if(ftpflag1 == 0):
+                    print("Finishing File :",self.ofile)
+                    file = open(opath,'rb')
+                    session.storbinary('STOR '+self.ofile, file)
+                    file.close()  
+                else:
+                    print("Exception has Occurred!")
+                session.close()
+
+
+
 try:
 
     if (code == '001'):    
@@ -257,6 +298,9 @@ try:
                 print("Option 3")
                 code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
                 x=False
+                
+                
+                
             else:
                 print("Invalid Selection")
     elif (code == '002'):
