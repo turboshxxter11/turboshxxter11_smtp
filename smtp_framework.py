@@ -259,7 +259,7 @@ class ftpTransfer:
                     session.mkd(datetime.now().strftime("%Y%m%d"))
                 except Exception as e:
                     ftpflag=1
-                    print(e)
+                    #print(e)
                 
                 try:
                     session.cwd(datetime.now().strftime("%Y%m%d"))
@@ -268,9 +268,12 @@ class ftpTransfer:
                     print(e)
                 
                 if(ftpflag1 == 0):
-                    print("Finishing File :",self.ofile)
+                    #print("Finishing File :",self.ofile)
                     file = open(opath,'rb')
-                    session.storbinary('STOR '+self.ofile, file)
+                    try:
+                        session.storbinary('STOR '+self.ofile, file)
+                    except Exception as e:
+                        print("unFinished File :",self.ofile)
                     file.close()  
                 else:
                     print("Exception has Occurred!")
