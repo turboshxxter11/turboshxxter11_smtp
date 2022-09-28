@@ -127,8 +127,9 @@ class Shoot:
                     file_write = open(wpath, 'a+')
                     file_write_f =  open(wpath_f, 'a+')
                     count=0
-                    
+                    fcount=0
                     for line in file:
+                        
                         if(count==0):
                             ln=line.strip().split(',')
                             try:
@@ -169,6 +170,7 @@ class Shoot:
                                 print("-> Fail ", end=" : ")
                                 print(smtp_server, end=" \n ")
                                 print(e)
+                                fcount=fcount+1
                                 
                                 file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+","+smtp_server+","+from_address+"\n")
                         count=count+1
@@ -176,6 +178,8 @@ class Shoot:
                     file_write_f.close()
                     file.close()
                     os.remove(fpath)
+                    if(fcount==0):
+                        os.remove(wpath_f)
                     
                 else:
                     print("Invalid File Extension "+i)
