@@ -107,6 +107,9 @@ class Shoot:
 
         ls=os.listdir(self.inbound_path)
         t_count=len(ls)
+        ndate=datetime.now().strftime("%Y%m%d")
+        ftpTransfer(self.outbound_path,ids+"_"+ndate+".csv")
+        wpath_up=self.outbound_path+"\\"+ids+"_"+ndate+".csv"
         if(len(ls)>0):
             print("Total Files:",len(ls))
             f_count=1
@@ -115,6 +118,7 @@ class Shoot:
                 fpath=self.inbound_path+"\\"+i
                 wpath=self.outbound_path+"\\"+ids+"_"+now.strftime("%H%M%S")+"_"+i
                 wpath_f=self.outbound_path+"\\fail_"+now.strftime("%H%M%S")+"_"+i
+                
                 print("Preparing File "+str(f_count)+" of "+str(t_count))
                 f_count=f_count+1
                 if(i.endswith('.csv')):                    
@@ -126,6 +130,7 @@ class Shoot:
                     file= open(fpath,'r')
                     file_write = open(wpath, 'a+')
                     file_write_f =  open(wpath_f, 'a+')
+                    file_write_up =  open(wpath_up, 'a+')
                     count=0
                     fcount=0
                     for line in file:
@@ -165,6 +170,7 @@ class Shoot:
                                 print("-> Success", end=" : ")
                                 print(smtp_server)
                                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                                file_write_up.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                             except Exception as e:
                                 
                                 print("-> Fail ", end=" : ")
@@ -173,9 +179,11 @@ class Shoot:
                                 fcount=fcount+1
                                 
                                 file_write_f.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+","+smtp_server+","+from_address+"\n")
+                                
                         count=count+1
                     file_write.close()
                     file_write_f.close()
+                    file_write_up.close()
                     file.close()
                     os.remove(fpath)
                     if(fcount==0):
@@ -184,7 +192,7 @@ class Shoot:
                 else:
                     print("Invalid File Extension "+i)
                     os.remove(fpath)
-                ftpTransfer(self.outbound_path,ids+"_"+now.strftime("%H%M%S")+"_"+i)
+            ftpTransfer(self.outbound_path,ids+"_"+ndate+".csv")
         else:
             print("No Files To Process in inbound")
 
