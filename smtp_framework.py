@@ -8,8 +8,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 
+
 class TurboSx:
-    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,mail_type="mail",body_type="html"):
+    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,smtp_con,mail_type="mail",body_type="html"):
         self.from_address=from_address
         self.to=to
         self.subject=subject
@@ -19,7 +20,7 @@ class TurboSx:
         self.body_type=body_type
         self.smtp_server=smtp_server
         self.smtp_port=smtp_port
-        
+        self.smtp_con=smtp_con
         self.send_mail()
 
     def display(self):
@@ -78,24 +79,22 @@ class TurboSx:
         
 
     def send_mail(self):
-        #try:
-            
-            msg=self.compose_mail()
+        msg=self.compose_mail()
+        
+        # Send the message via local SMTP server. 
+        #s = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        #s.connect(self.smtp_server, self.smtp_port)
+        #s.ehlo()
+        #s.starttls()
+        #s.ehlo()
+        self.smtp_con.login(self.from_address, self.pwd) #login with mail_id and password
+        # sendmail function takes 3 arguments: sender's address, recipient's address
+        # and message to send - here it is sent as one string.
+        self.smtp_con.sendmail(self.from_address, self.to, msg.as_string())
+        #s.quit()
 
-            # Send the message via local SMTP server. 
-            s = smtplib.SMTP(self.smtp_server, self.smtp_port)
-            s.connect(self.smtp_server, self.smtp_port)
-            s.ehlo()
-            s.starttls()
-            s.ehlo()
-            s.login(self.from_address, self.pwd) #login with mail_id and password
-            # sendmail function takes 3 arguments: sender's address, recipient's address
-            # and message to send - here it is sent as one string.
-            s.sendmail(self.from_address, self.to, msg.as_string())
-            s.quit()
-        #except Exception as e:
-            #print(e)
        
+
 
 class Shoot:
     def __init__(self,inbound_path=sys.argv[1]+"\inbound",outbound_path=sys.argv[1]+"\outbound\\"+datetime.now().strftime("%Y%m%d"),builds_path=sys.argv[1]+"\\builds"):        
@@ -116,9 +115,8 @@ class Shoot:
             for i in os.listdir(self.inbound_path):
                 now = datetime.now()
                 fpath=self.inbound_path+"\\"+i
-                wpath=self.outbound_path+"\\"+ids+"_"+now.strftime("%H%M%S")+"_"+i
+                wpath=self.outbound_path+"\\"+now.strftime("%H%M%S")+"_"+i
                 wpath_f=self.outbound_path+"\\fail_"+now.strftime("%H%M%S")+"_"+i
-                
                 print("Preparing File "+str(f_count)+" of "+str(t_count))
                 f_count=f_count+1
                 if(i.endswith('.csv')):                    
@@ -128,13 +126,12 @@ class Shoot:
                     #print(wpath)
                     
                     file= open(fpath,'r')
-                    file_write = open(wpath, 'a+')
+                    
+                    file_write = open(wpath_up, 'a+')
                     file_write_f =  open(wpath_f, 'a+')
-                    file_write_up =  open(wpath_up, 'a+')
                     count=0
                     fcount=0
                     for line in file:
-                        
                         if(count==0):
                             ln=line.strip().split(',')
                             try:
@@ -143,16 +140,16 @@ class Shoot:
                                 pwd=ln[1]
                                 smtp_server=ln[2]
                                 smtp_port=ln[3]
-                                file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
-#                                 try:
-#                                     s = smtplib.SMTP(smtp_server, smtp_port)
-#                                     s.connect(smtp_server, smtp_port)
-#                                     s.ehlo()
-#                                     s.starttls()
-#                                     s.ehlo()
-#                                 except Exception as e:
-#                                     print(e)
-#                                     print("Unable to Connect to the smtp server: "+smtp_server+" at port: "+smtp_port)
+                                #file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
+                                try:
+                                    s = smtplib.SMTP(smtp_server, smtp_port)
+                                    s.connect(smtp_server, smtp_port)
+                                    s.ehlo()
+                                    s.starttls()
+                                    s.ehlo()
+                                except Exception as e:
+                                    print(e)
+                                    print("Unable to Connect to the smtp server: "+smtp_server+" at port: "+smtp_port)
                             except Exception as e:
                                 print("Error in First line Configs for File {file}!!!".format(file=fpath))
                         else:
@@ -165,14 +162,12 @@ class Shoot:
                             #print("Body :"+body)
                             
                             try:
-                                TurboSx(from_address,ln[1],subject,body,pwd,smtp_server,smtp_port)
+                                TurboSx(from_address,ln[1],subject,body,pwd,smtp_server,smtp_port,s)
                                 
                                 print("-> Success", end=" : ")
                                 print(smtp_server)
                                 file_write.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
-                                file_write_up.write(ln[0]+","+ln[1]+","+ln[2]+","+ln[3]+"\n")
                             except Exception as e:
-                                
                                 print("-> Fail ", end=" : ")
                                 print(smtp_server, end=" \n ")
                                 print(e)
@@ -183,12 +178,14 @@ class Shoot:
                         count=count+1
                     file_write.close()
                     file_write_f.close()
-                    file_write_up.close()
                     file.close()
                     os.remove(fpath)
                     if(fcount==0):
                         os.remove(wpath_f)
-                    
+                    try:
+                        s.quit()
+                    except Exception as e:
+                        print(e)
                 else:
                     print("Invalid File Extension "+i)
                     os.remove(fpath)
@@ -202,6 +199,7 @@ class Shoot:
         for line in file:
             str=str+line.strip()
         return str
+
             
 class splitFeeds:
     def __init__(self,feeds_path=sys.argv[1]+"\\feeds",inbound_path=sys.argv[1]+"\\inbound"):
