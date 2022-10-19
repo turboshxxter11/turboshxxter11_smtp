@@ -511,8 +511,8 @@ try:
             elif (val == "3"):
                 print("Option 3")
                 Shoot_slow()
-            elif(val == "3"):
-                print("Option 3")
+            elif(val == "4"):
+                print("Option 4")
                 code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
                 x=False
                 
