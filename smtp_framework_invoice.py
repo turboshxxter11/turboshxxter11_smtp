@@ -157,7 +157,7 @@ class Shoot:
                             ln=line.strip().split('|')
                             print(count, end="::")
                             print(ln,end="")
-                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0],email=ln[1],phone=[4])
+                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0],email=ln[1],phone=ln[4])
                             
                             #print("Subject :"+subject)
                             body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0]).replace("{email}", ln[1]).replace("{phone}", ln[4]).replace("{address}", ln[5])
@@ -407,7 +407,7 @@ class splitFeeds:
         try:
             self.performSplit()
         except Exception as e:
-            print(e)
+            #print(e)
             print("Error!!! please Review data.csv and email.csv in Feeds Path!")
         print("Split Operation Exit!")
 
