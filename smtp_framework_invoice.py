@@ -408,7 +408,7 @@ class splitFeeds:
             self.performSplit()
         except Exception as e:
             #print(e)
-            print("Error!!! please Review data.csv and email.csv in Feeds Path!")
+            print("Error!!! please Review invoice_data.csv and email.csv in Feeds Path!")
         print("Split Operation Exit!")
 
     def performSplit(self):
