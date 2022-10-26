@@ -3,6 +3,7 @@ import os
 import sys
 import requests
 import ftplib
+import csv
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
