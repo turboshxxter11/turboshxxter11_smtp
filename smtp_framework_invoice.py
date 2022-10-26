@@ -417,6 +417,7 @@ class splitFeeds:
         print("Split Operation Exit!")
 
     def performSplit(self):
+        self.csv2psv()
         file_data= open(self.feeds_path+"\\data.csv",'r')
         file_email= open(self.feeds_path+"\\email.csv",'r')
         count=0
@@ -447,7 +448,7 @@ class splitFeeds:
             count=count+1
             file_write.close()
     def csv2psv(self):
-        with open(self.feeds_path+"\\data.csv", 'r',newline='\n') as fin, \
+        with open(self.feeds_path+"\\invoice_data.csv", 'r',newline='\n') as fin, \
             open(self.feeds_path+"\\stage1_data.csv", 'w') as fout:
             reader = csv.DictReader(fin)
             writer = csv.DictWriter(fout, reader.fieldnames, delimiter='|')
