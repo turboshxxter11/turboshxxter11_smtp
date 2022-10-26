@@ -355,14 +355,10 @@ class Shoot_slow:
                             ln=line.strip().split('|')
                             print(count, end="::")
                             print(ln,end="")
-                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0])
-                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(email=ln[1])
-                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(phone=ln[4])
+                            subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0],email=ln[1],phone=[4])
+                            
                             #print("Subject :"+subject)
-                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0])
-                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{email}", ln[1])
-                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{phone}", ln[4])
-                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{address}", ln[5])
+                            body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0]).replace("{email}", ln[1]).replace("{phone}", ln[4]).replace("{address}", ln[5])
                             #print("Body :"+body)
                             
                             try:
