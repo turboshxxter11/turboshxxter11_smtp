@@ -419,7 +419,7 @@ class splitFeeds:
 
     def performSplit(self):
         self.csv2psv()
-        file_data= open(self.feeds_path+"\\data.csv",'r')
+        file_data= open(self.feeds_path+"\\psv_data.csv",'r')
         file_email= open(self.feeds_path+"\\email.csv",'r')
         count=0
         k=0
