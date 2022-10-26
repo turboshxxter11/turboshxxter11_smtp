@@ -519,7 +519,7 @@ try:
 
     if (code == '001'):    
         while x:
-            print("Select Option:")
+            print("Select Option(Invoice):")
             print("Press 1 to Split Files (Feeds -> inbound):")
             print("Press 2 to Shoot(Fast) (inbound -> outbound):")
             print("Press 3 to Shoot(Stable/Slow) (inbound -> outbound):")
