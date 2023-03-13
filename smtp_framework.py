@@ -459,9 +459,9 @@ class ftpTransfer:
             opath=self.outbound_path+"\\"+self.ofile
             if(self.ofile.endswith('.csv') and self.ofile.startswith(ids) ):
                 session = ftplib.FTP('gablink.host','u692443236.email_user','Turboisbest@1')
-                session.cwd('domains')
-                session.cwd('boxyinsider.com')
-                session.cwd('public_html')
+#                 session.cwd('domains')
+#                 session.cwd('boxyinsider.com')
+#                 session.cwd('public_html')
                 session.cwd('TurboSx')
                 ftpflag=0
                 ftpflag1=0
