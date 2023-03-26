@@ -32,7 +32,7 @@ class TurboSx:
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.subject
-        msg['From'] = self.from_address
+        msg['From'] = "The Artide <"+self.from_address+">"
         msg['To'] = self.to
 
         # Create the body of the message (a plain-text and an HTML version).
@@ -223,7 +223,7 @@ class TurboSx_slow:
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.subject
-        msg['From'] = self.from_address
+        msg['From'] = "The Artide <"+self.from_address+">"
         msg['To'] = self.to
 
         # Create the body of the message (a plain-text and an HTML version).
