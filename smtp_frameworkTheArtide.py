@@ -458,7 +458,7 @@ class ftpTransfer:
             now = datetime.now()
             opath=self.outbound_path+"\\"+self.ofile
             if(self.ofile.endswith('.csv') and self.ofile.startswith(ids) ):
-                session = ftplib.FTP('gablink.host','u692443236.email_user','Turboisbest@1')
+                session = ftplib.FTP('82.180.175.90','u692443236.turbo','Rankingsquadisbest@1')
 #                 session.cwd('domains')
 #                 session.cwd('boxyinsider.com')
 #                 session.cwd('public_html')
