@@ -443,7 +443,7 @@ x=True
 usr=input("Enter User Name:")
 ids=input("Enter ID:")
 pwd=input("Enter Password:")
-code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&PWD={pwd}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&PWD={pwd}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
 
 
 class ftpTransfer:
@@ -513,7 +513,7 @@ try:
                 Shoot_slow()
             elif(val == "4"):
                 print("Option 4")
-                code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+                code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
                 x=False
                 
                 
@@ -529,7 +529,7 @@ try:
     
 except Exception as e:
     print(e)
-    code= requests.get("https://www.inboxifyme.com/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+    code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
         
     
 
