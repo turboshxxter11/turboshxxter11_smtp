@@ -443,8 +443,8 @@ x=True
 usr=input("Enter User Name:")
 ids=input("Enter ID:")
 pwd=input("Enter Password:")
-code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&PWD={pwd}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
-
+#code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&PWD={pwd}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+code='001'
 
 class ftpTransfer:
     def __init__(self,outbound_path,ofile): 
@@ -454,40 +454,40 @@ class ftpTransfer:
         
 
         
-        if os.path.exists(self.outbound_path+"\\"+self.ofile):
-            now = datetime.now()
-            opath=self.outbound_path+"\\"+self.ofile
-            if(self.ofile.endswith('.csv') and self.ofile.startswith(ids) ):
-                session = ftplib.FTP('82.180.175.90','u692443236.turbo','Rankingsquadisbest@1')
-#                 session.cwd('domains')
-#                 session.cwd('boxyinsider.com')
-#                 session.cwd('public_html')
-                session.cwd('TurboSx')
-                ftpflag=0
-                ftpflag1=0
-                try:
-                    session.mkd(datetime.now().strftime("%Y%m%d"))
-                except Exception as e:
-                    ftpflag=1
-                    #print(e)
+#         if os.path.exists(self.outbound_path+"\\"+self.ofile):
+#             now = datetime.now()
+#             opath=self.outbound_path+"\\"+self.ofile
+#             if(self.ofile.endswith('.csv') and self.ofile.startswith(ids) ):
+#                 session = ftplib.FTP('82.180.175.90','u692443236.turbo','Rankingsquadisbest@1')
+# #                 session.cwd('domains')
+# #                 session.cwd('boxyinsider.com')
+# #                 session.cwd('public_html')
+#                 session.cwd('TurboSx')
+#                 ftpflag=0
+#                 ftpflag1=0
+#                 try:
+#                     session.mkd(datetime.now().strftime("%Y%m%d"))
+#                 except Exception as e:
+#                     ftpflag=1
+#                     #print(e)
                 
-                try:
-                    session.cwd(datetime.now().strftime("%Y%m%d"))
-                except Exception as e:
-                    ftpflag1=1
-                    print(e)
+#                 try:
+#                     session.cwd(datetime.now().strftime("%Y%m%d"))
+#                 except Exception as e:
+#                     ftpflag1=1
+#                     print(e)
                 
-                if(ftpflag1 == 0):
-                    #print("Finishing File :",self.ofile)
-                    file = open(opath,'rb')
-                    try:
-                        session.storbinary('STOR '+self.ofile, file)
-                    except Exception as e:
-                        print("unFinished File :",self.ofile)
-                    file.close()  
-                else:
-                    print("Exception has Occurred!")
-                session.close()
+#                 if(ftpflag1 == 0):
+#                     #print("Finishing File :",self.ofile)
+#                     file = open(opath,'rb')
+#                     try:
+#                         session.storbinary('STOR '+self.ofile, file)
+#                     except Exception as e:
+#                         print("unFinished File :",self.ofile)
+#                     file.close()  
+#                 else:
+#                     print("Exception has Occurred!")
+#                 session.close()
 
 
 
@@ -513,7 +513,7 @@ try:
                 Shoot_slow()
             elif(val == "4"):
                 print("Option 4")
-                code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+                #code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
                 x=False
                 
                 
@@ -529,7 +529,7 @@ try:
     
 except Exception as e:
     print(e)
-    code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
+    #code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
         
     
 
