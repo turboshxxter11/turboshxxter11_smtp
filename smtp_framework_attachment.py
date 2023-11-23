@@ -312,8 +312,8 @@ class TurboSx_Attach:
 
     def htmltopdf(self):
         htmlPath=self.path
-        exldfilenamExt=path[path.rindex("\\"):len(path)].strip('\\').split('.')[0]
-        pdfPath=path[0:self.path.rindex("\\")]+"\\"+exldfilenamExt
+        exldfilenamExt=self.path[self.path.rindex("\\"):len(self.path)].strip('\\').split('.')[0]
+        pdfPath=self.path[0:self.path.rindex("\\")]+"\\"+exldfilenamExt
         pdfkit.from_file(htmlPath, pdfPath)
 
     def compose_mail(self):
