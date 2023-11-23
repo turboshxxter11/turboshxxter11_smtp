@@ -226,7 +226,7 @@ class TurboSx_slow:
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.subject
-        msg['From'] = attach_etag+self.from_address
+        msg['From'] = attach_etag+" "+self.from_address
         msg['To'] = self.to
 
         # Create the body of the message (a plain-text and an HTML version).
