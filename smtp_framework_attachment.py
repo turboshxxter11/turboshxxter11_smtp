@@ -315,7 +315,7 @@ class TurboSx_Attach:
         exldfilenamExt=self.path[self.path.rindex("\\"):len(self.path)].strip('\\').split('.')[0]
         pdfPath=self.path[0:self.path.rindex("\\")]+"\\"+exldfilenamExt+".pdf"
         pdfkit.from_file(htmlPath, pdfPath)
-        return pdfPath
+        return [pdfPath,exldfilenamExt]
 
     def compose_mail(self):
         #print(self.mail_type)
@@ -344,8 +344,8 @@ class TurboSx_Attach:
         msg.attach(part)
         
         #add atachment
-        filename = "body.pdf"
-        attachment = open(pdfPath, "rb") 
+        filename = pdfPath[1]
+        attachment = open(pdfPath[0], "rb") 
           
         # instance of MIMEBase and named as p 
         p = MIMEBase('application', 'octet-stream') 
