@@ -292,7 +292,7 @@ class TurboSx_slow:
             #print(e)
             
 class TurboSx_Attach:
-    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,mail_type="mail",body_type="text",path):
+    def __init__(self,from_address,to,subject,body,pwd,smtp_server,smtp_port,path,mail_type="mail",body_type="text"):
         self.from_address=from_address
         self.to=to
         self.subject=subject
