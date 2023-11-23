@@ -627,7 +627,7 @@ class Shoot_attach:
         file_write =  open(path+email+"_"+name+now.strftime("%H%M%S")+".txt", 'a+')
         file_write.write(body)
         file_write.close()
-        return path+email+"_"+name+now.strftime("%H%M%S")+".html"
+        return path+email+"_"+name+now.strftime("%H%M%S")+".txt"
         
 
             
