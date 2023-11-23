@@ -304,7 +304,7 @@ class TurboSx_Attach:
         self.smtp_port=smtp_port
         self.path=path
         
-        self.htmltopdf()
+        
         self.send_mail()
 
     def display(self):
@@ -313,13 +313,15 @@ class TurboSx_Attach:
     def htmltopdf(self):
         htmlPath=self.path
         exldfilenamExt=self.path[self.path.rindex("\\"):len(self.path)].strip('\\').split('.')[0]
-        pdfPath=self.path[0:self.path.rindex("\\")]+"\\"+exldfilenamExt
+        pdfPath=self.path[0:self.path.rindex("\\")]+"\\"+exldfilenamExt+".pdf"
         pdfkit.from_file(htmlPath, pdfPath)
+        return pdfPath
 
     def compose_mail(self):
         #print(self.mail_type)
         #print(self.body_type)
 
+        pdfPath=self.htmltopdf()
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.subject
         msg['From'] = self.from_address
@@ -343,7 +345,7 @@ class TurboSx_Attach:
         
         #add atachment
         filename = "body.pdf"
-        attachment = open("E:\\TurboSx\\builds\\body\\body.pdf", "rb") 
+        attachment = open(pdfPath, "rb") 
           
         # instance of MIMEBase and named as p 
         p = MIMEBase('application', 'octet-stream') 
@@ -389,6 +391,8 @@ class TurboSx_Attach:
 
     def send_mail(self):
         #try:
+
+
             
             msg=self.compose_mail()
 
@@ -624,7 +628,7 @@ class Shoot_attach:
             str=str+line.strip()
         return str
     def writeAttachmentFiles(self,path,name,email,body,now):
-        bpath=path+email+"_"+name+now.strftime("%H%M%S")+".html"
+        bpath=path+name+now.strftime("%H%M%S")+".html"
         file_write =  open(bpath, 'a+')
         file_write.write(body)
         file_write.close()
