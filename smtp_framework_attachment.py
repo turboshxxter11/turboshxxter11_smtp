@@ -624,10 +624,11 @@ class Shoot_attach:
             str=str+line.strip()
         return str
     def writeAttachmentFiles(self,path,name,email,body,now):
-        file_write =  open(path+email+"_"+name+now.strftime("%H%M%S")+".txt", 'a+')
+        bpath=path+email+"_"+name+now.strftime("%H%M%S")+".html"
+        file_write =  open(bpath, 'a+')
         file_write.write(body)
         file_write.close()
-        return path+email+"_"+name+now.strftime("%H%M%S")+".txt"
+        return bpath
         
 
             
