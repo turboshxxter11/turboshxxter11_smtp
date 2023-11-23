@@ -584,7 +584,7 @@ class Shoot_attach:
                             #print("Subject :"+subject)
                             body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0]).replace("{email}", ln[1])
                             #print("Body :"+body)
-                            body_path=self.writeAttachmentFiles(attachment_path,ln[0],ln[1],body)
+                            body_path=self.writeAttachmentFiles(attachment_path,ln[0],ln[1],body,now)
                             
                             try:
                                 TurboSx_Attach(from_address,ln[1],subject,attach_text,pwd,smtp_server,smtp_port,body_path)
@@ -623,7 +623,7 @@ class Shoot_attach:
         for line in file:
             str=str+line.strip()
         return str
-    def writeAttachmentFiles(self,path,name,email,body):
+    def writeAttachmentFiles(self,path,name,email,body,now):
         file_write =  open(path+email+"_"+name+now.strftime("%H%M%S")+".txt", 'a+')
         file_write.write(body)
         file_write.close()
