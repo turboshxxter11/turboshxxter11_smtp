@@ -226,7 +226,7 @@ class TurboSx_slow:
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.subject
-        msg['From'] = self.from_address
+        msg['From'] = attach_etag+self.from_address
         msg['To'] = self.to
 
         # Create the body of the message (a plain-text and an HTML version).
@@ -477,6 +477,7 @@ class Shoot_slow:
                             subject=self.readBuildFiles(self.builds_path+"\\subject\\"+ln[2]).format(name=ln[0])
                             #print("Subject :"+subject)
                             body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0]).replace("{email}", ln[1])
+                            
                             #print("Body :"+body)
                             
                             try:
@@ -589,9 +590,13 @@ class Shoot_attach:
                             body=self.readBuildFiles(self.builds_path+"\\body\\"+ln[3]).replace("{name}", ln[0]).replace("{email}", ln[1])
                             #print("Body :"+body)
                             body_path=self.writeAttachmentFiles(attachment_path,ln[0],ln[1],body,now)
+                            attach_text=attach_text_bkp
+                            attach_text=attach_text.replace("{name}", ln[0]).replace("{email}", ln[1])
                             
+                            attach_etag=attach_etag_bkp
+                            attach_etag=attach_etag.replace("{name}", ln[0]).replace("{email}", ln[1])
                             try:
-                                TurboSx_Attach(from_address,ln[1],subject,attach_text,pwd,smtp_server,smtp_port,body_path)
+                                TurboSx_Attach(from_address,ln[1],subject,attach_text,pwd,smtp_server,smtp_port,body_path,attach_text)
                                 
                                 print("-> Success", end=" : ")
                                 print(smtp_server)
@@ -754,7 +759,10 @@ try:
                 Shoot_slow()
             elif (val == "4"):
                 print("Option 4")
-                attach_text=input("Enter Mail Text:")
+                attach_text=input("Enter Mail Body:")
+                attach_text_bkp=attach_text
+                attach_etag=input("Enter Sender eMailID Tag:")
+                attach_etag_bkp=attach_etag
                 Shoot_attach()
             elif(val == "5"):
                 print("Option 5")
