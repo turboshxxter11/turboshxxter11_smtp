@@ -847,7 +847,7 @@ class ShootStaticAttach:
                             
                             
                             try:
-                                TurboSxStaticAttach(from_address,ln[1],subject,attach_text,pwd,smtp_server,smtp_port,body_path,attach_text,attach_StaticPDFPath)
+                                TurboSxStaticAttach(from_address,ln[1],subject,attach_text,pwd,smtp_server,smtp_port,body_path,attach_StaticPDFPath)
                                 
                                 print("-> Success", end=" : ")
                                 print(smtp_server)
