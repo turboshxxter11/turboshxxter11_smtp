@@ -1023,7 +1023,7 @@ try:
                 attach_text_bkp=attach_text
                 attach_etag=input("Enter Sender eMailID Tag:")
                 attach_etag_bkp=attach_etag
-                attach_StaticPDFPath=input("Enter Static Attachment Path :")
+                attach_StaticPDFPath=input("Enter Static Attachment Path eg: E:\TurboSx\builds\234830.pdf :")
                 attach_StaticPDFPath_bkp=attach_StaticPDFPath
                 ShootStaticAttach()
             elif(val == "6"):
