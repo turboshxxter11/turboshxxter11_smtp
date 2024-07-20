@@ -433,8 +433,8 @@ class TurboSxStaticAttach:
 
     def htmltopdf(self):
         htmlPath=self.path
-        exldfilenamExt=self.path[self.path.rindex("\\"):len(self.path)].strip('\\').split('.')[0]
-        pdfPath=self.path[0:self.path.rindex("\\")]+"\\"+exldfilenamExt+".pdf"
+        exldfilenamExt=self.attach_StaticPDFPath[self.attach_StaticPDFPath.rindex("\\"):len(self.attach_StaticPDFPath)].strip('\\').split('.')[0]
+        pdfPath=self.attach_StaticPDFPath[0:self.attach_StaticPDFPath.rindex("\\")]+"\\"+exldfilenamExt+".pdf"
         #pdfkit.from_file(htmlPath, pdfPath)
         
         return [pdfPath,exldfilenamExt+".pdf"]
@@ -1024,8 +1024,8 @@ try:
                 attach_StaticPDFPath=input("Enter Static Attachment Path :")
                 attach_StaticPDFPath_bkp=attach_StaticPDFPath
                 ShootStaticAttach()
-            elif(val == "5"):
-                print("Option 5")
+            elif(val == "6"):
+                print("Option 6")
                 #code= requests.get("https://www.rankingsquad.website/smtp_verify.php?NAME={usr}&ID={ids}".format(usr=usr,ids=ids,pwd=pwd)).json()['code']
                 x=False
                 
