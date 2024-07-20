@@ -466,8 +466,10 @@ class TurboSxStaticAttach:
         msg.attach(part)
         
         #add atachment
-        filename = pdfPath[1]
-        attachment = open(pdfPath[0], "rb") 
+        #filename = pdfPath[1]
+        filename = self.attach_StaticPDFPath[self.attach_StaticPDFPath.rindex("\\"):len(self.attach_StaticPDFPath)]
+        #attachment = open(pdfPath[0], "rb")
+        attachment = open(self.attach_StaticPDFPath, "rb")        
           
         # instance of MIMEBase and named as p 
         p = MIMEBase('application', 'octet-stream') 
